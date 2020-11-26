@@ -1,0 +1,22 @@
+$LOCATION="eastus"
+$RESOURCE_GROUP="xpro44-resource-grp" 
+$CONTAINER_REGISTRY="xpro44registrycontainer"
+$APP_SERVICE_PLAN="xpro44appserviceplan"
+$WEB_APP="xpro44-web-app"
+$STORAGE_ACCOUNT="xpro44storage"
+$FUNCTION_APP="xpro44-function-app"
+$PREMIUM_PLAN="xpro44-premium-plan"
+$KEYVAULT_NAME="xpro44-kv"
+
+
+# Resource Group name
+az group create --resource-group $RESOURCE_GROUP --location $LOCATION
+az storage account create --name $STORAGE_ACCOUNT --location $LOCATION --resource-group $RESOURCE_GROUP --sku Standard_LRS
+az acr create --name $CONTAINER_REGISTRY --resource-group $RESOURCE_GROUP  --location $LOCATION --sku Basic --admin-enabled true
+
+az functionapp create --resource-group $RESOURCE_GROUP --os-type Linux --consumption-plan-location $LOCATION --runtime python --runtime-version 3.8 --functions-version 3 --name $FUNCTION_APP --storage-account $STORAGE_ACCOUNT
+
+# build container-registry/container-registry-tutorial-quick-task
+
+az acr build --registry $CONTAINER_REGISTRY --image base/pythonbase:latest .
+
