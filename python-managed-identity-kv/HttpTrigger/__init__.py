@@ -19,10 +19,18 @@ def get_bearer_token(resource_uri):
 
     return access_token
 
-def main(req: func.HttpRequest) -> func.HttpResponse:
+def xxmain(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     resource_uri="https%3A%2F%2Fvault.azure.net%2F"
     token = get_bearer_token(resource_uri)
 
     return func.HttpResponse(f"This HTTP triggered function executed successfully. Token = {token}", status_code=200)
+
+def main(req: func.HttpRequest) -> func.HttpResponse:
+    logging.info('Python HTTP trigger function processed a request.')
+
+    identity_endpoint = os.environ["IDENTITY_ENDPOINT"]
+    identity_header = os.environ["IDENTITY_HEADER"]
+
+    return func.HttpResponse(f"This HTTP triggered function executed successfully. Token = {identity_endpoint} {identity_header}", status_code=200)
